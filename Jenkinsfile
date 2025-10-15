@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        dockerContainer {
-            image 'grafana/k6:latest'
-            label 'linux'
-        }
-    }
+    agent any
 
     tools {
         nodejs "NodeJS"   // ต้องตั้ง NodeJS tool ใน Jenkins ก่อน
@@ -41,6 +36,11 @@ pipeline {
         }
 
         stage('Run K6 Load Test') {
+            agent {
+                docker {
+                    image 'grafana/k6:latest'
+                }
+            }
             steps {
                 echo "⚡ Running K6 performance test via Docker..."
                 sh 'k6 run --out json=tests/reports/k6_results.json tests/k6_test.js'
