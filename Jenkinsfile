@@ -1,11 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        NODEJS_HOME = tool name: 'NodeJS', type: 'NodeJS'
-        PATH = "${NODEJS_HOME}/bin:${env.PATH}"
-    }
-
     tools {
         nodejs "NodeJS"   // ต้องตั้ง NodeJS tool ใน Jenkins ก่อน
     }
@@ -43,12 +38,9 @@ pipeline {
         stage('Run K6 Load Test') {
             steps {
                 echo "⚡ Running K6 performance test via Docker..."
-                sh """
-                    docker run --rm \\
-                        -v \$(pwd)/tests:/tests \\
-                        -w /tests \\
-                        loadimpact/k6 run --out json=tests/reports/k6_results.json tests/k6_test.js
-                """
+                docker.image('grafana/k6:latest').inside {
+                sh 'k6 run --out json=tests/reports/k6_results.json tests/k6_test.js'
+                }
             }
         }
 
