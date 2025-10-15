@@ -1,6 +1,9 @@
 pipeline {
     agent {
-        docker { image 'grafana/k6:latest' }
+        dockerContainer {
+            image 'grafana/k6:latest'
+            label 'linux'
+        }
     }
 
     tools {
