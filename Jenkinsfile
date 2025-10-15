@@ -39,7 +39,7 @@ pipeline {
             steps {
                 echo "⚡ Running K6 performance test..."
                 sh 'npm install --no-save k6'
-                sh 'npx k6 run --out json=tests/reports/k6_results.json tests/k6_test.js'
+                sh 'k6 run --out json=tests/reports/k6_results.json tests/k6_test.js'
             }
         }
 
