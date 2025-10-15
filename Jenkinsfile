@@ -1,32 +1,63 @@
 pipeline {
-  agent any
-  tools {
-    nodejs "NodeJS"
-  }
-  stages {
-    stage('Checkout') {
-      steps {
-        echo "✅ Cloning repository..."
-        git branch: 'main', url: 'https://github.com/Junrapxng/bookstore-api.git'
-      }
+    agent any
+
+    tools {
+        nodejs "NodeJS"   // ต้องตั้ง NodeJS tool ใน Jenkins ก่อน
     }
-    stage('Install') {
-      steps {
-        echo "📦 Installing dependencies..."
-        sh 'npm install'
-      }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                echo "📦 Cloning repository..."
+                checkout scm
+            }
+        }
+
+        stage('Install dependencies') {
+            steps {
+                echo "📦 Installing npm dependencies..."
+                sh 'npm install'
+            }
+        }
+
+        stage('Start API (background)') {
+            steps {
+                echo "🚀 Starting Bookstore API..."
+                sh 'nohup node app.js &'
+                sleep 5
+            }
+        }
+
+        stage('Run Postman Tests') {
+            steps {
+                echo "🧪 Running Postman tests with Newman..."
+                sh 'newman run tests/bookstore.postman_collection.json -r cli,html --reporter-html-export tests/reports/newman-report.html'
+            }
+        }
+
+        stage('Run K6 Load Test') {
+            steps {
+                echo "⚡ Running K6 performance test..."
+                sh 'k6 run --out json=tests/reports/k6_results.json tests/k6_test.js || true'
+            }
+        }
+
+        stage('Publish Reports') {
+            steps {
+                echo "📊 Publishing HTML reports..."
+                publishHTML(target: [
+                    reportDir: 'tests/reports',
+                    reportFiles: 'newman-report.html',
+                    reportName: 'Newman API Test Report'
+                ])
+            }
+        }
     }
-    stage('Test') {
-      steps {
-        echo "🧪 Running tests..."
-        sh 'npm test || echo "⚠️ Test failed (for demo, not stopping pipeline)"'
-      }
+
+    post {
+        always {
+            echo "✅ Pipeline finished. Cleaning up..."
+            sh "pkill node || true"
+        }
     }
-    stage('Build') {
-      steps {
-        echo "🏗️ Building app..."
-        sh 'npm run build || echo "No build step defined"'
-      }
-    }
-  }
 }
