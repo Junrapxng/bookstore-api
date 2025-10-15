@@ -14,7 +14,7 @@ export let options = {
   },
 };
 
-const BASE_URL = 'http://host.docker.internal:3000';
+const BASE_URL = "http://localhost:3000";
 
 export default function () {
   // เรียก API GET /books
