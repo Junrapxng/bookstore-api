@@ -36,14 +36,9 @@ pipeline {
         }
 
         stage('Run K6 Load Test') {
-            agent {
-                docker {
-                    image 'grafana/k6:latest'
-                    args '-u root'
-                }
-            }
             steps {
-                echo "⚡ Running K6 performance test via Docker..."
+                echo "⚡ Running K6 performance test..."
+                sh 'npm install -g k6'
                 sh 'k6 run --out json=tests/reports/k6_results.json tests/k6_test.js'
             }
         }
