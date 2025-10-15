@@ -39,6 +39,7 @@ pipeline {
             agent {
                 docker {
                     image 'grafana/k6:latest'
+                    args '-u root'
                 }
             }
             steps {
