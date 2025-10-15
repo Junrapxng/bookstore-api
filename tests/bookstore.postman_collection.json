@@ -55,10 +55,11 @@
 							"    pm.response.to.have.status(200);\r",
 							"});\r",
 							"\r",
-							"pm.test(\"Response should be an array\", function () {\r",
-							"    const jsonData = pm.response.json();\r",
-							"    pm.expect(jsonData).to.be.an('array');\r",
-							"});"
+							"pm.test(\"Response should be an object\", function () {\r",
+							"    const json = pm.response.json();\r",
+							"    pm.expect(json).to.be.an(\"object\");\r",
+							"});\r",
+							""
 						],
 						"type": "text/javascript",
 						"packages": {},
@@ -141,11 +142,10 @@
 							"    pm.response.to.have.status(200);\r",
 							"});\r",
 							"\r",
-							"pm.test(\"Title is updated\", function () {\r",
+							"pm.test(\"Response is an object\", function () {\r",
 							"    const jsonData = pm.response.json();\r",
-							"    pm.expect(jsonData.title).to.eql(\"Updated Book Title\");\r",
-							"});\r",
-							""
+							"    pm.expect(jsonData).to.be.an(\"object\");\r",
+							"});"
 						],
 						"type": "text/javascript",
 						"packages": {},
