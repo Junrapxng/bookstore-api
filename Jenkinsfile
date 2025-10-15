@@ -31,7 +31,7 @@ pipeline {
         stage('Run Postman Tests') {
             steps {
                 echo "🧪 Running Postman tests with Newman..."
-                sh 'newman run tests/bookstore.postman_collection.json -r cli,html --reporter-html-export tests/reports/newman-report.html'
+                sh 'npx newman run tests/bookstore.postman_collection.json -r cli,html --reporter-html-export tests/reports/newman-report.html'
             }
         }
 
