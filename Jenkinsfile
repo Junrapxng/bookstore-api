@@ -7,7 +7,7 @@ pipeline {
     stage('Checkout') {
       steps {
         echo "✅ Cloning repository..."
-        git branch: 'main', url: 'https://github.com/yourname/qa-api-demo.git'
+        git branch: 'main', url: 'https://github.com/Junrapxng/bookstore-api.git'
       }
     }
     stage('Install') {
