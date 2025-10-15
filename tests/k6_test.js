@@ -25,7 +25,7 @@ export let options = {
   },
 };
 
-const BASE_URL = "http://host.docker.internal:3000"; // สำหรับ container -> host API
+const BASE_URL = "http://localhost:3000"; // สำหรับ container -> host API
 
 export default function () {
   let res = http.get(`${BASE_URL}/books`);
